@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="poll">
+
+	<!-- 저장시켜주기  -->
+	<insert id="insertArticle" parameterType="pollDTO">
+		<selectKey keyProperty="pollNum" order="BEFORE" resultType="int"><!-- 시퀀스 뽑아서 num에 바인딩 -->
+		 	select poll_seq.nextval from dual
+		</selectKey>
+		insert into poll(pollNum, userId, stDate, endDate, target, pollTitle, pollCon, ans1, ans2, ans3, ans4, code)
+		values(#{pollNum}, #{userId}, #{stDate}, #{endDate}, #{target}, #{pollTitle}, #{pollCon}, #{ans1}, #{ans2}, #{ans3}, #{ans4}, #{code})
+	</insert>
+	<!-- 리스트 가져오기 -->
+	<select id="getArticleCount" resultType="int" parameterType="string">
+		select count(*) from poll where code=#{code}
+	</select>
+	<select id="getArticles" parameterType="hashmap" resultType="pollDTO">
+		<![CDATA[
+		  select B.*, r
+		   from (select A.*, rownum r from (select * from poll where code=#{code} order by endDate desc) A order by endDate desc) B
+		   where r >= #{startRow} and r <= #{endRow}
+		  ]]>
+	</select>
+	<!-- 진행중 , 완료 상태 업데이트-->
+	<!-- 진행중 -->
+	<update id="updatest2" parameterType="string">
+		<![CDATA[
+		update poll set pollStatus='진행중' where (code=#{code}) and (to_char(stDate, 'yyyymmdd') <= to_char(sysdate, 'yyyymmdd')) and (to_char(endDate, 'yyyymmdd') >= to_char(sysdate, 'yyyymmdd'))
+		]]>
+	</update>
+	<!-- 완료 -->
+	<update id="updatest1" parameterType="string">
+		<![CDATA[
+		update poll set pollStatus='완료' where (code=#{code}) and (to_char(endDate, 'yyyymmdd') < to_char(sysdate, 'yyyymmdd')) and (to_char(stDate, 'yyyymmdd') <= to_char(sysdate, 'yyyymmdd'))
+		]]>
+	</update>
+	<!-- 진행전 -->
+	<update id="updatest3">
+		<![CDATA[
+		update poll set pollStatus='진행전' where (code=#{code}) and (to_char(stDate, 'yyyymmdd') > to_char(sysdate, 'yyyymmdd'))
+		]]>
+	</update>
+	
+	<!-- 검색 리스트 가져오기 -->
+	<select id="getArticleCount2" parameterType="hashmap" resultType="int">
+		select count(*) from poll where (code=#{code}) and (${sel} like '%'||#{search}||'%')
+	</select>
+	<select id="getArticles2" parameterType="hashmap" resultType="pollDTO">
+		<![CDATA[
+	  	select B.*, r
+	   from (select A.*, rownum r from (select * from poll where (code=#{code}) and (${sel} like '%'||#{search}||'%') order by stDate desc) A order by stDate desc) B
+	   where r >= #{startRow} and r <= #{endRow}
+		]]>
+	</select>
+	<!-- 진행중 완료 리스트 가져오기 -->
+	<select id="getArticleCount3" resultType="int" parameterType="hashmap">
+		select count(*) from poll where code=#{code} and pollStatus like '%'||#{sort}||'%'
+	</select>
+	<select id="getArticles3" parameterType="hashmap" resultType="pollDTO">
+		<![CDATA[
+	  	select B.*, r
+	   from (select A.*, rownum r from (select * from poll where code=#{code} and pollStatus=#{sort} order by stDate desc) A order by stDate desc) B
+	   where r >= #{startRow} and r <= #{endRow}
+		]]>
+	</select>
+	<!-- 글 하나 가져오기 -->
+	<select id="getPoll" resultType="pollDTO" parameterType="int">
+		select * from poll where pollNum = #{value}
+	</select>
+	<!-- 글 하나 가져오기 -->
+	<select id="getPollRes" resultType="pollDTO" parameterType="String">
+		select * from poll where pollNum = #{value}
+	</select>
+	<!-- 기록유무 가져오기 -->
+	<select id="recordPoll" parameterType="hashmap" resultType="int">
+		select count(*) from pollUser where pollNum = #{pollNum} and userId=#{userId}
+	</select>
+	<!-- 접속중인 id의 부서정보 가져오기 -->
+	<select id="getUserDept" parameterType="string" resultType="string">
+		<![CDATA[
+		select dept from users where userId=#{userId}
+		]]>
+	</select>
+	
+	<!-- 투표수 추가 -->
+	<update id="plusPoll1" parameterType="hashmap">
+	<choose>
+		<when test='obj_value.equals("1")'>
+		update poll set res1 = res1 +1 , total = total +1 where pollNum = #{pollNum}
+		</when>
+		<when test='obj_value.equals("2")'>
+		update poll set res2 = res2 +1 , total = total +1 where pollNum = #{pollNum}
+		</when>
+		<when test='obj_value.equals("3")'>
+		update poll set res3 = res3 +1 , total = total +1 where pollNum = #{pollNum}
+		</when>
+		<when test='obj_value.equals("4")'>
+		update poll set res4 = res4 +1 , total = total +1 where pollNum = #{pollNum}
+		</when>
+	</choose>
+	</update>
+	<insert id="plusPollUser" parameterType="hashmap">
+		insert into pollUser(pollNum, userId) values(#{pollNum},#{userId})
+	</insert>
+	
+	
+	
+	<!-- 투표글 삭제 -->
+	<delete id="pollDelete" parameterType="string">
+		delete from poll where pollNum = #{value}
+	</delete>
+	<!-- 투표 댓글 등록 -->
+	<insert id="pollComment" parameterType="pollCommDTO">
+		<selectKey keyProperty="pollComNum" resultType="int" order="BEFORE">
+		 select pollCom_seq.nextval from dual
+		</selectKey>
+		<![CDATA[
+		insert into pollcomment(pollComNum,pollNum, userId, pollReg, pollComment, code) values(#{pollComNum},#{pollNum}, #{userId}, sysdate, #{pollComment}, #{code})
+		]]>
+	</insert>
+	
+	<!-- 투표글 댓글 개수 -->
+	<select id="countComment" parameterType="string" resultType="int">
+		select count(*) from pollcomment where pollNum=#{value}
+	</select>
+	<!-- 댓글 리스트 가져오기 -->
+	<select id="pollCommList" parameterType="string" resultType="pollCommDTO">
+		select * from pollcomment where pollNum=#{pollNum} order by pollReg asc
+	</select>
+	<!-- CheckId -->
+	<select id="CheckId" parameterType="hashmap" resultType="int">
+		select count(*) from pollcomment where pollComNum=#{pollComNum} and userId=#{userId}
+	</select>
+	<!-- 댓글 삭제 -->
+	<delete id="commDelete" parameterType="string">
+		delete from pollcomment where pollcomnum=#{pollComNum}
+	</delete>
+</mapper>

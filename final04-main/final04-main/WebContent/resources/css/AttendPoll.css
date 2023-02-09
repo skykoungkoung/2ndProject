@@ -1,0 +1,118 @@
+.attendLine {
+    text-align: -webkit-center;
+}
+.attendLine h6 {
+    background-color: #ccb6d47a;
+    margin: 0 350px;
+    border-radius: 20px;
+}
+.stateOk {
+    background-color: #1987544d;
+    border-radius:20px;
+}
+.stateNow {
+    background-color: #ff000070;
+    border-radius:20px;
+}
+.stateRoading {
+    background-color: #fff6004d;;
+    border-radius: 20px;
+}
+.pollconWrap input{
+	background : #8a909440;
+	border:2px solid #dab1da;
+	color:#741c7d;
+	padding:3px 10px;
+	border-radius:20px;
+	margin-top:4px;
+	outline :none;
+}
+
+.pollconWrap select{
+	background : #8a909440;
+	border:2px solid #dab1da;
+	color:#741c7d;
+	padding:3px 10px;
+	border-radius:20px;
+	margin-top:5px;
+	outline :none;
+}
+.pollWrap {
+    text-align: -webkit-center;
+    padding: 10px;
+    font-size: small;
+    font-weight: 700;
+}
+.pollconWrap {
+    border: solid thin;
+    width: 580px;
+    height: 450px;
+}
+.pollinner {
+    margin: 13px;
+}  
+.pollPageWrap{
+    text-align: -webkit-center;
+    padding: 10px;
+    margin-top: 50px;
+}
+.pollconPageWrap {
+    border: solid thin;
+    width: 580px;
+    border-radius:20px;
+}
+.pollinner {
+    margin: 13px;
+}  
+.pollChoise {
+     background-color: #e6d8e6a1;
+    /* padding: 20px; */
+    margin: 50px;
+    /* padding-right: 50px; */
+    background-size: 100px;
+    width: 250px;
+    border-radius:20px;
+}
+.pollChoiseRes
+{
+     background-color: #e6d8e6a1;
+    /* padding: 20px; */
+    margin: 50px;
+    /* padding-right: 50px; */
+    background-size: 200px;
+    width: 400px;
+    border-radius:20px;
+}
+.resBar{
+	text-align: center;
+}
+.input ans{
+	display: inline-block;
+}
+.pollResWrap {
+    text-align: -webkit-center;
+    margin-top: 50px;
+
+}
+.pollconResWrap {
+    border-radius:20px;border: solid thin;
+    width: 580px;
+    height: 60%;
+    padding-top: 23px;
+}
+
+.cssBar {
+    text-align: -webkit-center;
+    border-radius: 20px;
+    background-color: #e6d8e6a1;
+    margin: 0 20px 20px;
+    margin-top: 15px;
+}
+#comSubmit {
+   font-weight: 500;
+   white-space:pre;
+}
+
+.commCenter{
+	text-align: -webkit-center;
+}

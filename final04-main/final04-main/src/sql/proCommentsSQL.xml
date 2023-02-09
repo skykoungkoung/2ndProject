@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="proComments">
+  
+	<!-- 댓글 목록 -->
+	<select id="comment" resultType="proCommentsDTO">
+		select * from procomments where proNum=#{proNum} order by proReg asc
+	</select>
+  	<!-- 댓글 작성 -->
+  	<insert id="create" parameterType="proCommentsDTO">
+  	<selectKey keyProperty="proComNum" order="BEFORE" resultType="int">
+  		select procomments_seq.nextVal from dual
+  	</selectKey>
+  	insert into procomments values(#{proComNum},#{proNum},#{userId},sysdate,#{proComment},#{code},#{name})
+  	</insert>
+  	
+  	<!-- 댓글작성자=유저아이디 -->
+  	<select id="getName" parameterType="string" resultType="string">
+  		select name from Users where userId=#{value}
+  	</select>
+  	
+  	<!-- 댓글 삭제 -->
+  	<delete id="delete" parameterType="proCommentsDTO">
+  		delete from procomments where proComNum=#{proComNum}
+  	</delete>
+  	
+  	<!-- 댓글 삭제 -->
+  	<delete id="delComs" parameterType="string">
+  		delete from procomments where proNum=#{proNum}
+  	</delete>
+  	
+  	
+  </mapper>
+  

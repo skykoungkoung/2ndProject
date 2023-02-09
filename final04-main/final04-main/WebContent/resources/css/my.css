@@ -1,0 +1,121 @@
+
+/* 보낸 결재함 sendAppList */
+.stateReject {
+    background-color: #ff000070;
+    border-radius:20px;
+}
+.stateOK {
+    background-color: #1987544d;
+    border-radius:20px;
+}
+.roading {
+    background-color: #fff6004d;;
+    border-radius: 20px;
+}
+
+.my-btn button {
+    border: solid 1px #767676;
+    background-color: #efefef;
+    color: #000000;
+    border-radius: 3px;
+}
+
+.tdd{
+	text-align: left;
+}
+
+/* 결재 상세 (sendAppContent) */
+
+.appContentTitle{text-align: center; 
+	font-size: xx-large; 
+	font-weight: bold;
+}
+.appContentLeft {
+	float: left;
+}
+.appContentRight {
+	float: right;
+}
+.appConBtn {
+	text-align-last: center;
+}
+table.appContentRight td {
+	border: solid thin;
+	width: 50px;
+	height:25px;
+    text-align: center;	
+}
+.approvalWrap {
+    border: solid thin;
+}
+
+table.appCont1{
+	width:100%;
+}
+table.appCont1 td{
+	border: solid thin;
+}
+table.appCont2{
+	width:100%;
+	margin: 30px 0 30px 0;
+}
+table.appCont2 td{
+	border: solid thin;
+}
+
+/* 테이블 */
+.myTable{
+  width: 45%;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px #e3e3e3;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
+.myTable td{
+	height:33px;
+	border-bottom: solid thin lightgrey;
+}
+.myList-top {
+    background-color: rgba(0, 0, 0, 0.125)
+} 
+.myTable td a {
+    text-decoration: none;
+    color: #212529;
+}
+
+.myTable td a:hover {
+    color: #741c7d;
+}   
+.myTable td a:focus {
+    color: #21252933;
+}   
+
+.myList {
+    text-align: -webkit-center;
+}
+
+td.aa {
+    border-right: solid 1px lightgrey;
+    background-color: #d3d3d342;
+    width: 250px;
+    line-height: 50px;
+}
+
+/* 페이징 */
+.pageNums-all {
+    text-align: -webkit-center;
+}
+.pageNums{
+	text-decoration: none;
+    color: #000;
+}
+
+/* 메인페이지 */
+#wrapAll{
+	margin: 10px 30px 30px 30px;
+}
+#wrapAll h3{
+	font-size : x-large;
+	color: #741c7d;
+}

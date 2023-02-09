@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="main">
+  
+  	<insert id="addUser" parameterType="userDTO">
+		insert into users(code, userId, pw, name, email, tel, dept, position) values(#{code}, #{userId}, #{pw}, #{name}, #{email}, #{tel}, #{dept}, #{position})		
+  	</insert>
+  	
+  	<insert id="addBiz" parameterType="busDTO">
+  		insert into business values(#{code},#{bizName},#{bizCEO},#{bizNumber},#{bizTel},#{bizEmail},#{userId})
+  	</insert>
+  	
+  	<insert id="addCat" parameterType="catDTO">
+  		insert into category values(#{code}, #{approval}, #{mail}, #{attend}, #{project}, #{calendar}, #{reservation}, #{topic}, #{poll})
+  	</insert>
+  	<update id="addUserBiz" parameterType="hashmap">
+  		update users set code=#{code} where userId=#{userId}
+  	</update>
+  	<select id="idPwCheck" parameterType="userDTO" resultType="int">
+  		select count(*) from users where userId=#{userId}
+  		<if test="pw != null">and pw=#{pw}</if>
+  	</select>
+  	<select id="codeCheck" parameterType="busDTO" resultType="int">
+  		select count(*) from business where code=#{code}
+  	</select>
+  	<select id="getUserInfo" parameterType="userDTO" resultType="userDTO">
+  		select * from users where userId=#{userId}
+  	</select>
+  	
+  	<select id="takeCat" parameterType="string" resultType="catDTO">
+  		select * from category where code=#{value}
+  	</select>
+  	<select id="checkUser" parameterType="userDTO" resultType="int">
+  		select count(*) from users where name=#{name}
+  		<if test="email!=null">
+  		and email=#{email}
+  		</if>
+  	</select>
+  	<select id="checkPw" parameterType="userDTO" resultType="int">
+  		select count(*) from users where userId=#{userId} and name=#{name} 
+  	</select>
+  	<select id="getUserId" parameterType="userDTO" resultType="userDTO">
+  		select * from users where name=#{name} 
+		<if test="email!=null">
+  		and email=#{email}
+  		</if>
+  	</select>
+  	<select id="getPw" parameterType="userDTO" resultType="userDTO">
+  		select * from users where name=#{name} and userId=#{userId}
+  	</select>
+  	
+  	<!-- 공지사항 글개수 가져오기 -->
+  	<select id="countNoti" parameterType="string" resultType="int">
+		select count(*) from notice where code = #{scode}
+	</select>
+	<!-- 공지사항 글목록 가져오기 -->
+	<select id="getNotiList" parameterType="map" resultType="notiDTO">
+		<![CDATA[
+		select B.* from 
+			(select A.*, rownum r from 
+				(select * from notice where code=#{scode} order by notiNum desc) A 
+			order by notiNum desc) B
+		where r >= #{start} and r <= #{end}
+		]]>
+	</select>
+	<!-- 회사정보 가져오기 -->
+	<select id="getBizInfo" parameterType="string" resultType="busDTO">
+		select * from business where code = #{value}
+	</select>
+	
+  </mapper>
